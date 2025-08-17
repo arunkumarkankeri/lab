@@ -1,0 +1,303 @@
+Lab.1 Write code for a simple user registration form for an event.
+
+Index.html file for Event Registration Event
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Registration Form</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+<h1>Event Registration</h1>
+<form id="registrationForm" onsubmit="return validateForm()">
+<label for="name">Full Name</label>
+<input type="text" id="name" name="name" required placeholder="Enter your full name">
+
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email" required placeholder="Enter your email">
+
+<label for="phone">Phone Number</label>
+<input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+
+<label for="event">Event Type</label>
+<select id="event" name="event" required>
+<option value="">Select Event</option>
+<option value="workshop">Workshop</option>
+<option value="seminar">Seminar</option>
+<option value="webinar">Webinar</option>
+</select>
+
+<button type="submit">Register</button>
+</form>
+<p id="error-message" class="error-message"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+Script.js file for event registration
+function validateForm() {
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const phone = document.getElementById("phone").value;
+const event = document.getElementById("event").value;
+const errorMessage = document.getElementById("error-message");
+
+// Clear previous error message
+errorMessage.textContent = "";
+
+// Validate the fields
+if (name.trim() === "" || email.trim() === "" || phone.trim() === "" || event.trim() === "") {
+errorMessage.textContent = "All fields are required!";
+return false;
+}
+
+// Validate email format
+const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+if (!emailPattern.test(email)) {
+errorMessage.textContent = "Please enter a valid email address!";
+return false;
+}
+
+// Validate phone number format (basic example)
+const phonePattern = /^[0-9]{10}$/;
+if (!phonePattern.test(phone)) {
+errorMessage.textContent = "Please enter a valid phone number (10 digits).";
+return false;
+}
+
+// If everything is valid, form can be submitted
+alert("Registration successful!");
+return true;
+}
+
+
+Styles.css file for event registration
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f9;
+margin: 0;
+padding: 0;
+}
+
+.container {
+width: 50%;
+margin: 50px auto;
+background-color: white;
+padding: 20px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+}
+
+h1 {
+text-align: center;
+margin-bottom: 20px;
+}
+
+form {
+display: flex;
+flex-direction: column;
+}
+
+label {
+margin-bottom: 8px;
+font-weight: bold;
+}
+
+input, select, button {
+padding: 10px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+button {
+background-color: #28a745;
+color: white;
+border: none;
+cursor: pointer;
+font-size: 16px;
+}
+
+button:hover {
+background-color: #218838;
+}
+
+.error-message {
+color: red;
+font-size: 14px;
+text-align: center;
+}
+
+
+
+
+
+
+3Install Jenkins:
+sudo apt update
+sudo apt install jenkins -y
+
+Start and enable Jenkins:
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+sudo systemctl status Jenkins
+
+sudo ufw allow 8080
+
+Access the Jenkins UI
+Edit the Security group of EC2 instance to have access to Jenkins UI.
+Add the SG rule on port 8080 and with anywhere IP address as shown here
+
+
+Copy paste the EC2 instance Public IP with port as 8080 and you can access the Jenkins UI
+
+
+
+
+5Install Terraform on Ubuntu: 24.04 LTS
+
+Unzip the Terraform folder and check the version
+
+Step -1 Initialize Terraform use the following command:
+terraform init
+
+Step 2: create the terraform.tf file
+sudo nano example.tf
+provider "aws" {
+profile = "default"
+region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+ami = "ami-0e35ddab05955cf57"
+instance_type = "t2.micro"
+tags = {
+Name = "myinstance"
+}
+}
+Step 3: validate the syntax of files
+terraform validate
+
+
+Step 4: check the resources created/deleted using terraform plan
+terraform plan
+
+terraform plan -out myplan
+
+Step 5: Apply the plan created
+terraform apply myplan
+
+Login to AWS console and check if new instance (myinstance) is created
+
+Additional exercise
+Run a script inside the new EC2 instance created
+
+terraform apply myplan2
+Destroy the resources – use terraform destroy
+
+
+ 6Configuration Management with Ansible: Basics of Ansible, Automating Server Configurations with Playbooks.
+
+
+To run the playbook use the following command:
+ansible-playbook myplaybook.yaml
+ubuntu@ip-172-31-11-54:~/ansible$ ansible-playbook myplaybook.yaml
+PLAY [play1]
+****************************
+*********
+TASK [Gathering Facts]
+****************************
+*******
+ok: [slave1]
+TASK [install java]
+****************************
+********
+ok: [slave1]
+
+PLAY [play2]
+****************************
+*********
+TASK [Gathering Facts]
+****************************
+*******
+[DEPRECATION WARNING]: Distribution Ubuntu 20.04 on host slave2 should use /usr/bin/python3,
+but is using /usr/bin/python
+for backward compatibility with prior Ansible releases. A future Ansible release will default to using
+the discovered
+platform python for this host. See https://docs.ansible.com/ansible-
+core/2.11/reference_appendices/interpreter_discovery.html for more information. This feature will
+be removed in version
+2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [slave2]
+TASK [install mysql]
+****************************
+*******
+changed: [slave2]
+PLAY RECAP
+****************************
+***********
+slave1 : ok=2 changed=0 unreachable=0 failed=0 skipped=0 rescued=0
+ignored=0
+slave2 : ok=2 changed=1 unreachable=0 failed=0 skipped=0 rescued=0
+ignored=0
+
+
+Output:
+ubuntu@ip-172-31-26-3:~$ java --version
+openjdk 11.0.11 2021-04-20
+OpenJDK Runtime Environment (build 11.0.11+9-Ubuntu-0ubuntu2.20.04)
+OpenJDK 64-Bit Server VM (build 11.0.11+9-Ubuntu-0ubuntu2.20.04, mixed mode, sharing)
+ubuntu@ip-172-31-18-250:~$ mysql --version
+mysql Ver 8.0.27-0ubuntu0.20.04.1 for Linux on x86_64 ((Ubuntu))
+
+
+
+
+7Develop a simple containerized application using Docker.
+
+Simple web application
+
+
+Dockerfile
+
+
+Build the Dockerfile
+• ubuntu@ip-172-31-39-74:~/dockerfile$ cd
+• ubuntu@ip-172-31-39-74:~$ cd dockerfile/
+• ubuntu@ip-172-31-39-74:~/dockerfile$ ls
+• 1.html Dockerfile
+• ubuntu@ip-172-31-39-74:~/dockerfile$
+• ubuntu@ip-172-31-39-74:~/dockerfile$ sudo docker build . -t new_dockerfile
+
+• Sending build context to Docker daemon 3.072kB
+• Step 1/6 : FROM ubuntu:16.04
+• ---&gt; b6f507652425
+• Step 2/6 : RUN apt-get update
+• ---&gt; Using cache
+• ---&gt; bf05c22a886d
+• Step 3/6 : RUN apt-get -y install apache2
+• ---&gt; Using cache
+• ---&gt; a4753e6014a5
+• Step 4/6 : ADD 1.html /var/www/html
+• ---&gt; a5a7ce8b8982
+• Step 5/6 : ENTRYPOINT apachectl -D FOREGROUND
+• ---&gt; Running in 89a3425f548c
+• Removing intermediate container 89a3425f548c
+• ---&gt; 28a589c4fe23
+• Step 6/6 : ENV name Veeranna_Gatate
+• ---&gt; Running in 5964f2cac053
+• Removing intermediate container 5964f2cac053
+• ---&gt; 1dcd5a2224e3
+• Successfully built 1dcd5a2224e3
+• Successfully tagged new_dockerfile:latest
+• ubuntu@ip-172-31-39-74:~/dockerfile$
+
+
+
+
+
