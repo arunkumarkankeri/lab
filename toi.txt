@@ -1,0 +1,159 @@
+1a void setup() {
+pinMode(LED_BUILTIN, OUTPUT);
+}
+void loop() {
+digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+delay(1000);                    
+digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+delay(2000);                  
+}
+1b#define LED 13
+#define BUZZER 19
+bool value;
+void setup() {
+pinMode(LED,INPUT);
+pinMode(BUZZER,OUTPUT);
+Serial.begin(9600);
+}
+void loop() {
+value = digitalRead(LED);
+if(value==0)
+{
+  digitalWrite(BUZZER,HIGH);
+  Serial.println("BUTTON PRESSED,BUZZER ON");
+}
+else{
+      digitalWrite(BUZZER,LOW);
+      Serial.println("BUTTON not PRESSED, BUZZER OFF");
+    }
+  delay(300);
+}
+
+
+2a#include "DHT.h"
+#define DHTPIN 4   
+#define DHTTYPE DHT11   // DHT 11
+#define DHTTYPE DHT22   // DHT 22
+DHT Dht(DHTPIN, DHTTYPE);
+float temp = 0;
+float hum = 0;
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Dht11 test!");
+  Dht.begin();
+}
+void loop() { // Wait a few seconds between measurements.
+  delay(2000);
+  temp = Dht.readTemperature();
+  hum = Dht.readHumidity();
+  Serial.print("Temperature : ");
+  Serial.println(temp);
+  Serial.print("Humidity: ");
+  Serial.println(hum);
+  Serial.println();
+}
+
+
+2b#include"DHT_U.h"
+#define DHTPIN 4
+#define DHTTYPE DHT11
+float temp;
+float hum;
+DHT Dht(DHTPIN,DHTTYPE);
+void setup() {
+Serial.begin(9600);
+Dht.begin();
+}
+void loop() {
+temp = Dht.readTemperature();
+hum = Dht.readHumidity();
+Serial.print(" Temperature °C: ");
+Serial.println(temp);
+Serial.print(" Humidity %RH: ");
+Serial.println(hum);
+delay(2000);
+}
+
+
+3#define PB 15     // Push Button connected to GPIO15
+#define RELAY 2   // Relay connected to GPIO2
+void setup() {
+  Serial.begin(9600);
+  pinMode(PB, INPUT);         // Or use INPUT_PULLUP if wiring GND to button
+  pinMode(RELAY, OUTPUT);
+}
+void loop() {
+  int pb = digitalRead(PB);   // Read the push button state
+  Serial.println(pb);
+  if (pb == LOW) {            // Button pressed (LOW if wired with pull-up logic)
+    digitalWrite(RELAY, HIGH);  // Turn ON relay
+  } else {
+    digitalWrite(RELAY, LOW);   // Turn OFF relay
+  }
+  delay(100);  // Small debounce delay
+}
+
+
+4#define LDR 35
+int value = 0;
+int lightpercentage = 0;
+void setup() {
+// put your setup code here, to run once:
+pinMode(LDR,INPUT),
+Serial.begin(9600);
+}
+void loop() {
+// put your main code here, to run repeatedly:
+value = analogRead(LDR);
+lightpercentage = map(value,0,4095,0,100);
+Serial.print(" LIGHT INTENSITY(BRIGHTNESS) :");
+Serial.println(lightpercentage);
+delay(1000);
+}
+
+
+9#include <Adafruit_GFX.h>
+#include<Adafruit_ST7735.h>
+#include<SPI.h>
+#include"DHT.h"
+//define pins of TFT screen
+#define TFT_CS 12 //chip select
+#define TFT_RST 14 //RES(reset)
+#define TFT_DC 13 //AO (SDA)serial data
+#define TFT_SCLK 22 //Serial clock(scl)
+#define TFT_MOSI 21 //SDA MASTER IN SLAVE OUT
+#define DHTPIN 4
+#define DHTTYPE DHT11
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,TFT_DC,TFT_MOSI,TFT_SCLK ,TFT_RST);
+DHT Dht(DHTPIN,DHTTYPE);
+float temp;
+float hum;
+void setup(void) {
+// put your setup code here, to run once:
+Serial.begin(9600);
+Serial.print("ST7735 TFT grafics test");
+tft.initR(INITR_BLACKTAB);
+Serial.println("Initializing......");
+tft.setTextWrap(true); //horizontizal(false) or vertical(true)
+Dht.begin();
+}
+void loop() {
+// put your main code here, to run repeatedly:
+temp = Dht.readTemperature();
+hum = Dht.readHumidity();
+tft.fillScreen(ST7735_BLACK); //backgroundcolor
+tft.setCursor(0,0);
+tft.setTextColor(ST7735_RED);
+tft.setTextSize(2);
+tft.print("TEMP : ");
+tft.setTextColor(ST7735_YELLOW);
+tft.println(temp);
+tft.setTextColor(ST7735_CYAN);
+tft.print("HUM : ");
+tft.setTextColor(ST7735_ORANGE);
+tft.println(hum);
+delay(2000);
+}
+
+
+
